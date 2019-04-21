@@ -5,28 +5,37 @@ import random
 #test
 
 class Snake:
-    x = [60,40,20]
-    y = [20,20,20]
+    #x = [60,40,20]
+    #y = [20,20,20]
+    
+    x = []
+    y = []
+
     speed = 20
     direction = 1
-    length = 3
+    length = 0
+
+    def __init__(self):
+        self.x.append( random.randint(0,40)*20 )
+        self.y.append( random.randint(0,30)*20 )
+        self.length = 1
 
     def Update(self):
         if self.direction == 0:
            self.zamien()
-           self.y[0] = self.y[0]-self.speed
+           self.y[0] = self.y[0] - self.speed
 
         if self.direction == 1:
             self.zamien()
-            self.x[0]= self.x[0] +self.speed
+            self.x[0]= self.x[0] + self.speed
 
         if self.direction == 2:
             self.zamien()
-            self.y[0] = self.y[0] +self.speed
+            self.y[0] = self.y[0] + self.speed
 
         if self.direction == 3:
             self.zamien()
-            self.x[0] = self.x[0] -self.speed
+            self.x[0] = self.x[0] - self.speed
             
         #print(self.x)
         #print(self.y)
@@ -34,8 +43,8 @@ class Snake:
 
 
     def add(self):
-        self.x.append(self.x[self.length-1])
-        self.y.append(self.y[self.length-1])
+        self.x.append(self.x[0])
+        self.y.append(self.y[0])
         self.length+=1
         #self.zamien()
         print(self.length)
@@ -63,27 +72,31 @@ class Snake:
             if self.x[i] == self.x[0] and self.y[i] == self.y[0]:
                 return False
 
-
         return True
 
 
-    #length wieksze od 1
-
-
     def MoveLeft(self):
-        if self.x[1] >= self.x[0]:
+        if  self.length > 1 and self.x[1] >= self.x[0]:
+            self.direction = 3
+        elif self.length == 1:
             self.direction = 3
 
     def MoveRight(self):
-        if self.x[1] <= self.x[0]:
+        if self.length > 1 and self.x[1] <= self.x[0]:
+            self.direction = 1
+        elif self.length == 1:
             self.direction = 1
 
     def MoveUp(self):
-        if self.y[1] >= self.y[0]:
+        if self.length > 1 and self.y[1] >= self.y[0]:
+            self.direction = 0
+        elif self.length == 1:
             self.direction = 0
 
     def MoveDown(self):
-        if self.y[1] <= self.y[0]:
+        if self.length > 1 and self.y[1] <= self.y[0]:
+            self.direction = 2
+        elif self.length == 1:
             self.direction = 2
 
 
@@ -177,13 +190,13 @@ class App:
             #if(keys[K_w]):
                 #self.wonsz.add()
 
-
-            self.wonsz.Update()
-            self.punkt.Update(self.wonsz)
-
-
             if self.wonsz.CollisionCheck() == False:
                 self._running = False
+
+            self.punkt.Update(self.wonsz)
+
+            self.wonsz.Update()
+
  
             self.on_loop()
             self.on_render()
